@@ -179,16 +179,18 @@ export function TablesView({ user, businessConfig, isWaiterMode = false, onSelec
   const filteredTables = filter === 'all' ? tables : tables.filter(t => t.status === filter);
 
   return (
-    <div className="space-y-6">
+    <div className={`space-y-4 ${isWaiterMode ? 'h-full flex flex-col min-h-0 overflow-hidden' : ''}`}>
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <UtensilsCrossed className="w-6 h-6 text-amber-600" />
-            Table Management
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <UtensilsCrossed className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600" />
+            <span>Table Management</span>
           </h2>
-          <p className="text-sm text-gray-500">
-            Configure bar counters, dining tables, and monitor live dining & order statuses
+          <p className="text-xs sm:text-sm text-gray-500">
+            {isWaiterMode
+              ? 'Select an available or occupied table to take customer orders'
+              : 'Configure bar counters, dining tables, and monitor live dining & order statuses'}
           </p>
         </div>
 
@@ -204,14 +206,14 @@ export function TablesView({ user, businessConfig, isWaiterMode = false, onSelec
       </div>
 
       {successMsg && (
-        <div className="p-3.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-sm font-medium flex items-center gap-2">
+        <div className="shrink-0 p-3 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs sm:text-sm font-medium flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           <span>{successMsg}</span>
         </div>
       )}
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+      <div className="shrink-0 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
         <button
           onClick={() => setFilter('all')}
           className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
@@ -265,7 +267,8 @@ export function TablesView({ user, businessConfig, isWaiterMode = false, onSelec
       </div>
 
       {/* Grid of Tables */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className={`${isWaiterMode ? 'flex-1 min-h-0 overflow-y-auto pr-1' : ''}`}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
         {filteredTables.map((table) => (
           <div
             key={table.id}
@@ -357,6 +360,7 @@ export function TablesView({ user, businessConfig, isWaiterMode = false, onSelec
           <p className="text-gray-500 font-medium">No tables found matching this filter</p>
         </div>
       )}
+      </div>
 
       {/* Table Create/Edit Modal */}
       {showModal && (

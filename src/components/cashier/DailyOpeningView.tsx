@@ -307,7 +307,7 @@ export function DailyOpeningView({ user, businessConfig, onNavigateToPOS, onComp
   // Already submitted and not actively editing
   if (existingOpening && !isEditingExisting) {
     return (
-      <div className="space-y-6 max-w-5xl mx-auto pb-12">
+      <div className="h-full min-h-0 overflow-y-auto pr-1 space-y-4 max-w-5xl mx-auto pb-8">
         {/* Confirmed Banner */}
         <div className="rounded-3xl bg-emerald-900 text-white p-6 sm:p-8 shadow-xl border border-emerald-700/50">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
@@ -328,19 +328,19 @@ export function DailyOpeningView({ user, businessConfig, onNavigateToPOS, onComp
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               <button
                 type="button"
                 onClick={handlePrintOpeningSlip}
-                className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-emerald-800/80 hover:bg-emerald-700 text-white text-sm font-bold border border-emerald-600 cursor-pointer shadow-sm transition-all"
+                className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-emerald-800/80 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold border border-emerald-600 cursor-pointer shadow-sm transition-all"
               >
                 <Printer className="w-4 h-4" />
-                <span>Print Opening Slip</span>
+                <span>Print Slip</span>
               </button>
               <button
                 type="button"
                 onClick={() => setIsEditingExisting(true)}
-                className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold border border-white/20 cursor-pointer transition-all"
+                className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-bold border border-white/20 cursor-pointer transition-all"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>Recount / Adjust</span>
@@ -349,10 +349,19 @@ export function DailyOpeningView({ user, businessConfig, onNavigateToPOS, onComp
                 <button
                   type="button"
                   onClick={onNavigateToPOS}
-                  className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-sm font-black shadow-lg cursor-pointer transition-all active:scale-95"
+                  className="inline-flex items-center space-x-1.5 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-black shadow-lg cursor-pointer transition-all active:scale-95"
                 >
                   <span>RECORD SALE (POS)</span>
                   <ArrowRight className="w-4 h-4" />
+                </button>
+              )}
+              {onComplete && (
+                <button
+                  type="button"
+                  onClick={onComplete}
+                  className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold cursor-pointer transition-all border border-emerald-600"
+                >
+                  <span>Dashboard</span>
                 </button>
               )}
             </div>
@@ -440,7 +449,7 @@ export function DailyOpeningView({ user, businessConfig, onNavigateToPOS, onComp
 
   // Active Count Entry Form
   return (
-    <div className="space-y-6 max-w-5xl mx-auto pb-16">
+    <div className="h-full min-h-0 overflow-y-auto pr-1 space-y-4 max-w-5xl mx-auto pb-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -648,22 +657,22 @@ export function DailyOpeningView({ user, businessConfig, onNavigateToPOS, onComp
         />
       </div>
 
-      {/* Action Footer Bar */}
-      <div className="sticky bottom-4 z-30 bg-slate-900/95 backdrop-blur-md rounded-2xl p-4 text-white shadow-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+      {/* Action Footer Bar - ALWAYS 100% VISIBLE */}
+      <div className="sticky bottom-0 z-30 bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 text-white shadow-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div>
-          <p className="text-xs text-slate-400 uppercase font-semibold">Ready to Confirm Shift Start</p>
-          <p className="text-base font-bold text-white">
-            <span className="text-amber-400 font-mono text-lg">{totalCountedUnits}</span> total units across{' '}
+          <p className="text-[10px] text-slate-400 uppercase font-semibold">Ready to Confirm Shift Start</p>
+          <p className="text-sm sm:text-base font-bold text-white">
+            <span className="text-amber-400 font-mono text-base sm:text-lg">{totalCountedUnits}</span> total units across{' '}
             <span className="text-amber-400 font-mono">{products.length}</span> products
           </p>
         </div>
 
-        <div className="flex items-center space-x-3 w-full sm:w-auto">
+        <div className="flex items-center space-x-2 w-full sm:w-auto">
           {isEditingExisting && (
             <button
               type="button"
               onClick={() => setIsEditingExisting(false)}
-              className="flex-1 sm:flex-initial px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-bold cursor-pointer transition-all"
+              className="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-bold cursor-pointer transition-colors"
             >
               Cancel
             </button>
@@ -673,7 +682,7 @@ export function DailyOpeningView({ user, businessConfig, onNavigateToPOS, onComp
             type="button"
             disabled={submitting}
             onClick={handleSubmitOpening}
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center space-x-2 px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm tracking-wide shadow-lg cursor-pointer transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center space-x-2 px-6 py-2.5 sm:py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm tracking-wide shadow-lg cursor-pointer transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? (
               <>

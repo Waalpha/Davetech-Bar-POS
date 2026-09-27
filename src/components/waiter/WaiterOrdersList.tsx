@@ -61,19 +61,19 @@ export function WaiterOrdersList({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="h-full flex flex-col min-h-0 space-y-3 overflow-hidden">
       {/* Waiter Sales Performance Card */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="shrink-0 bg-white rounded-2xl border border-gray-200 p-3 sm:p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
+          <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold shrink-0">
             <DollarSign className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400 block">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
               My Sales Today
             </span>
             <div className="flex items-baseline gap-2">
-              <span className="text-xl font-black text-emerald-700">
+              <span className="text-lg sm:text-xl font-black text-emerald-700 font-mono">
                 {formatCurrency(myTotalSoldToday, currency)}
               </span>
               <span className="text-xs text-gray-500 font-medium">
@@ -86,7 +86,7 @@ export function WaiterOrdersList({
         {myPendingSalesToday > 0 && (
           <div className="bg-amber-50 border border-amber-200 rounded-xl px-3 py-1.5 self-start sm:self-auto">
             <span className="text-gray-500 text-xs mr-1">Pending at Cashier:</span>
-            <strong className="text-amber-800 font-black text-xs">
+            <strong className="text-amber-800 font-black text-xs font-mono">
               {formatCurrency(myPendingSalesToday, currency)}
             </strong>
             <span className="text-amber-700 text-[10px] ml-1">
@@ -96,17 +96,17 @@ export function WaiterOrdersList({
         )}
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="shrink-0 flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2">
             {activeFilterMode === 'pending' ? (
               <>
-                <Clock className="w-5 h-5 text-amber-600" />
+                <Clock className="w-4 h-4 text-amber-600" />
                 <span>My Pending Orders ({displayedOrders.length})</span>
               </>
             ) : (
               <>
-                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 <span>My Completed Orders ({displayedOrders.length})</span>
               </>
             )}
@@ -122,22 +122,23 @@ export function WaiterOrdersList({
           <button
             type="button"
             onClick={onNewOrderClick}
-            className="self-start sm:self-auto flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-amber-600/20 transition-all cursor-pointer active:scale-98"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-amber-600/20 transition-all cursor-pointer active:scale-98 shrink-0"
           >
-            <UtensilsCrossed className="w-4 h-4" />
+            <UtensilsCrossed className="w-3.5 h-3.5" />
             <span>Take Customer Order</span>
           </button>
         )}
       </div>
 
       {displayedOrders.length === 0 && (
-        <div className="text-center py-16 bg-white rounded-2xl border border-gray-200 shadow-xs flex flex-col items-center justify-center p-6">
-          <UtensilsCrossed className="w-12 h-12 text-gray-300 mx-auto mb-2" />
-          <p className="text-gray-500 font-medium">
+        <div className="flex-1 flex flex-col items-center justify-center p-8 bg-white rounded-2xl border border-gray-200 shadow-xs text-center">
+          <UtensilsCrossed className="w-12 h-12 text-gray-300 mx-auto mb-2 opacity-50" />
+          <p className="text-gray-600 font-semibold text-sm">
             {filterMode === 'pending'
               ? 'No pending orders right now'
               : 'No completed orders recorded yet'}
           </p>
+          <p className="text-xs text-gray-400 mt-1">Ready to serve your next guest?</p>
           {onNewOrderClick && (
             <button
               type="button"
@@ -151,7 +152,9 @@ export function WaiterOrdersList({
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      {displayedOrders.length > 0 && (
+        <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
         {displayedOrders.map((order) => (
           <div
             key={order.id}
@@ -246,7 +249,9 @@ export function WaiterOrdersList({
             </div>
           </div>
         ))}
-      </div>
+          </div>
+        </div>
+      )}
 
       {/* KOT Modal */}
       {selectedOrderForKot && (

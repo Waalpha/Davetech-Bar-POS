@@ -121,7 +121,7 @@ export function CashierStockView({ user, businessConfig, onNavigateToOpening, on
   });
 
   return (
-    <div className="space-y-6">
+    <div className="h-full min-h-0 overflow-y-auto pr-1 space-y-4">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Bar Stock Status</h2>

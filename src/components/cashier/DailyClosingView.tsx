@@ -16,7 +16,10 @@ import {
   Search,
   CheckCircle,
   Wallet,
-  Plus
+  Plus,
+  ShoppingCart,
+  LayoutDashboard,
+  ArrowRight
 } from 'lucide-react';
 import { getLocalCachedProducts, queueClosingForSync } from '../../lib/offlineManager';
 import { subscribeExpenses, getLocalExpenses } from '../../lib/expenseService';
@@ -25,9 +28,11 @@ import { RecordExpenseModal } from '../common/RecordExpenseModal';
 interface DailyClosingViewProps {
   user: UserProfile;
   businessConfig?: BusinessConfig | null;
+  onNavigateToDashboard?: () => void;
+  onNavigateToPOS?: () => void;
 }
 
-export function DailyClosingView({ user, businessConfig }: DailyClosingViewProps) {
+export function DailyClosingView({ user, businessConfig, onNavigateToDashboard, onNavigateToPOS }: DailyClosingViewProps) {
   const tenantId = user.businessId || DEFAULT_BUSINESS_ID;
   const todayStr = new Date().toISOString().split('T')[0];
   const closingDocId = `${todayStr}-${user.uid}`;
@@ -451,7 +456,7 @@ export function DailyClosingView({ user, businessConfig }: DailyClosingViewProps
     const hasDiscrepancy = existingClosing.items.some(i => i.variance !== 0);
 
     return (
-      <div className="space-y-6 max-w-5xl mx-auto pb-12">
+      <div className="h-full min-h-0 overflow-y-auto pr-1 space-y-4 max-w-5xl mx-auto pb-8">
         {/* Banner */}
         <div className="rounded-3xl bg-slate-900 text-white p-6 sm:p-8 shadow-xl border border-slate-800">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
@@ -472,11 +477,11 @@ export function DailyClosingView({ user, businessConfig }: DailyClosingViewProps
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               <button
                 type="button"
                 onClick={handlePrintClosingTicket}
-                className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold border border-slate-700 cursor-pointer shadow-sm transition-all"
+                className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs sm:text-sm font-bold border border-slate-700 cursor-pointer shadow-sm transition-all"
               >
                 <Printer className="w-4 h-4" />
                 <span>Print Closing Slip</span>
@@ -484,11 +489,31 @@ export function DailyClosingView({ user, businessConfig }: DailyClosingViewProps
               <button
                 type="button"
                 onClick={() => setIsEditingExisting(true)}
-                className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-bold border border-white/20 cursor-pointer transition-all"
+                className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-bold border border-white/20 cursor-pointer transition-all"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>Adjust / Recount</span>
               </button>
+              {onNavigateToPOS && (
+                <button
+                  type="button"
+                  onClick={onNavigateToPOS}
+                  className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-black shadow-md cursor-pointer transition-all active:scale-95"
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  <span>RECORD SALE (POS)</span>
+                </button>
+              )}
+              {onNavigateToDashboard && (
+                <button
+                  type="button"
+                  onClick={onNavigateToDashboard}
+                  className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs sm:text-sm font-bold cursor-pointer transition-all border border-slate-700"
+                >
+                  <LayoutDashboard className="w-4 h-4" />
+                  <span>Dashboard</span>
+                </button>
+              )}
             </div>
           </div>
 
@@ -631,7 +656,7 @@ export function DailyClosingView({ user, businessConfig }: DailyClosingViewProps
 
   // Active Take Closing Stock Form
   return (
-    <div className="space-y-6 max-w-5xl mx-auto pb-16">
+    <div className="h-full min-h-0 overflow-y-auto pr-1 space-y-4 max-w-5xl mx-auto pb-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -947,11 +972,11 @@ export function DailyClosingView({ user, businessConfig }: DailyClosingViewProps
         />
       </div>
 
-      {/* Sticky Submit Footer */}
-      <div className="sticky bottom-4 z-30 bg-slate-900/95 backdrop-blur-md rounded-2xl p-4 text-white shadow-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+      {/* Sticky Submit Footer - ALWAYS 100% VISIBLE */}
+      <div className="sticky bottom-0 z-30 bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 text-white shadow-2xl border border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div>
-          <p className="text-xs text-slate-400 uppercase font-semibold">End-of-Day Shift Submission</p>
-          <p className="text-base font-bold text-white">
+          <p className="text-[10px] text-slate-400 uppercase font-semibold">End-of-Day Shift Submission</p>
+          <p className="text-sm sm:text-base font-bold text-white">
             Counted <span className="text-amber-400 font-mono font-black">{totalActualUnits}</span> / {totalExpectedUnits} expected bottles
             {totalDiscrepanciesCount > 0 && (
               <span className="text-red-400 text-xs font-normal ml-2">({totalDiscrepanciesCount} items with variance)</span>
@@ -959,12 +984,12 @@ export function DailyClosingView({ user, businessConfig }: DailyClosingViewProps
           </p>
         </div>
 
-        <div className="flex items-center space-x-3 w-full sm:w-auto">
+        <div className="flex items-center space-x-2 w-full sm:w-auto">
           {isEditingExisting && (
             <button
               type="button"
               onClick={() => setIsEditingExisting(false)}
-              className="flex-1 sm:flex-initial px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-bold cursor-pointer"
+              className="flex-1 sm:flex-initial px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-bold cursor-pointer transition-colors"
             >
               Cancel
             </button>
@@ -974,7 +999,7 @@ export function DailyClosingView({ user, businessConfig }: DailyClosingViewProps
             type="button"
             disabled={submitting}
             onClick={handleSubmitClosing}
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center space-x-2 px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm tracking-wide shadow-lg cursor-pointer transition-all active:scale-95 disabled:opacity-50"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center space-x-2 px-6 py-2.5 sm:py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm tracking-wide shadow-lg cursor-pointer transition-all active:scale-95 disabled:opacity-50"
           >
             {submitting ? (
               <>

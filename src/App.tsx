@@ -323,6 +323,7 @@ export default function App() {
             user={userProfile}
             businessConfig={businessConfig}
             onComplete={() => setCashierTab('dashboard')}
+            onNavigateToPOS={() => setCashierTab('sell')}
           />
         )}
         {cashierTab === 'stock' && (
@@ -337,6 +338,8 @@ export default function App() {
           <DailyClosingView
             user={userProfile}
             businessConfig={businessConfig}
+            onNavigateToDashboard={() => setCashierTab('dashboard')}
+            onNavigateToPOS={() => setCashierTab('sell')}
           />
         )}
         {cashierTab === 'sales' && (

@@ -231,7 +231,7 @@ export function CashierExpensesView({ user, businessConfig }: CashierExpensesVie
   };
 
   return (
-    <div className="space-y-6">
+    <div className="h-full min-h-0 overflow-y-auto pr-1 space-y-4">
       {/* Header and Action */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
